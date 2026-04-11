@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Checkout — TNB Trendy N Bespoke</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Josefin+Sans:wght@200;300;400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{--green:#024024;--green-light:#035a30;--green-dark:#012a18;--gold:#C9A84C;--gold-light:#e4c97e;--white:#ffffff;--cream:#faf9f6;--text:rgba(2,64,36,0.65);--text-light:rgba(2,64,36,0.4);--text-muted:rgba(2,64,36,0.25);--border:rgba(2,64,36,0.08);--border-gold:rgba(201,168,76,0.2);--red:#c62828;--success:#2e7d32}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Josefin Sans',sans-serif;background:var(--cream);color:var(--green);overflow-x:hidden}
+
+/* ════════ LOADER ════════ */
+#loader{position:fixed;inset:0;background:var(--green);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:36px;transition:opacity 1s cubic-bezier(.4,0,.2,1),visibility 1s}
+#loader.hide{opacity:0;visibility:hidden;pointer-events:none}
+.loader-outer{position:relative;width:140px;height:140px}
+.loader-outer svg{width:100%;height:100%;animation:lSpin 3s linear infinite}
+.loader-outer circle{fill:none;stroke-linecap:round}
+.l-ring1{stroke:rgba(201,168,76,0.08);stroke-width:1}
+.l-ring2{stroke:rgba(201,168,76,0.15);stroke-width:1;stroke-dasharray:180 60;animation:lDash 4s linear infinite}
+.l-ring3{stroke:var(--gold);stroke-width:1.5;stroke-dasharray:100 240;animation:lDash 2.5s ease-in-out infinite}
+@keyframes lSpin{to{transform:rotate(360deg)}}
+@keyframes lDash{to{stroke-dashoffset:-360}}
+.loader-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center}
+.l-logo{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:300;color:var(--gold);letter-spacing:0.4em;opacity:0}
+.loader-outer:hover .l-logo{opacity:1}
+.l-tag{font-size:0.45rem;letter-spacing:0.6em;color:rgba(201,168,76,0.45);text-transform:uppercase;margin-top:6px}
+.l-progress{width:200px;height:1px;background:rgba(201,168,76,0.08);position:relative;overflow:hidden;border-radius:2px}
+.l-progress::after{content:'';position:absolute;left:-40%;top:0;width:40%;height:100%;background:linear-gradient(90deg,transparent,var(--gold),transparent);animation:lSlide 2s ease-in-out infinite}
+@keyframes lSlide{0%{left:-40%}100%{left:100%}}
+.l-particles{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.l-p{position:absolute;width:2px;height:2px;background:var(--gold);border-radius:50%;opacity:0}
+.l-p:nth-child(1){top:15%;left:20%;animation:lFloat 4s 0s infinite}
+.l-p:nth-child(2){top:70%;left:75%;animation:lFloat 5s 0.8s infinite}
+.l-p:nth-child(3){top:40%;left:85%;animation:lFloat 3.5s 1.5s infinite}
+.l-p:nth-child(4){top:80%;left:30%;animation:lFloat 4.5s 0.3s infinite}
+.l-p:nth-child(5){top:25%;left:60%;animation:lFloat 3s 1s infinite}
+.l-p:nth-child(6){top:55%;left:10%;animation:lFloat 5.5s 2s infinite}
+@keyframes lFloat{0%{opacity:0;transform:translateY(0) scale(0)}20%{opacity:0.6;transform:translateY(-20px) scale(1)}80%{opacity:0.3;transform:translateY(-60px) scale(0.5)}100%{opacity:0;transform:translateY(-80px) scale(0)}}
+
+/* ════════ NAV ════════ */
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:0 40px;display:flex;align-items:center;justify-content:space-between;height:72px;background:rgba(255,255,255,0.95);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid rgba(201,168,76,0.15);box-shadow:0 4px 30px rgba(2,64,36,0.06);transition:all 0.4s}
+nav.scrolled{height:64px}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:300;color:var(--green);letter-spacing:0.25em;text-decoration:none;transition:color 0.4s}
+.nav-links{display:flex;gap:6px;list-style:none;background:rgba(2,64,36,0.04);border:1px solid var(--border);border-radius:60px;padding:6px 8px}
+.nav-links a{text-decoration:none;color:var(--green);font-size:0.62rem;letter-spacing:0.12em;text-transform:uppercase;font-weight:300;display:flex;align-items:center;gap:7px;padding:8px 18px;border-radius:50px;transition:all 0.3s;white-space:nowrap}
+.nav-links a i{font-size:0.7rem;opacity:0.7;transition:opacity 0.3s}
+.nav-links a:hover i,.nav-links a.active i{opacity:1}
+.nav-links a:hover{background:rgba(201,168,76,0.12);color:var(--gold)}
+.nav-links a.active{background:var(--gold);color:var(--green);font-weight:600}
+.nav-links a.active i{color:var(--green);opacity:1}
+.nav-actions{display:flex;align-items:center;gap:12px}
+.nav-icon-btn{background:rgba(2,64,36,0.04);border:1px solid var(--border);width:40px;height:40px;border-radius:50%;cursor:pointer;color:var(--green);font-size:0.85rem;transition:all 0.3s;display:flex;align-items:center;justify-content:center;position:relative}
+.nav-icon-btn:hover{background:var(--gold);border-color:var(--gold);color:var(--green)}
+.cart-count{position:absolute;top:-4px;right:-4px;background:var(--gold);color:var(--white);font-size:0.5rem;width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Josefin Sans',sans-serif;font-weight:600}
+
+/* ════════ MOBILE PILL ════════ */
+.mobile-pill{display:none;position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:1001;background:rgba(2,64,36,0.94);backdrop-filter:blur(28px);border-radius:60px;padding:8px 12px;border:1px solid rgba(201,168,76,0.3);box-shadow:0 12px 48px rgba(2,64,36,0.4);align-items:center;width:calc(100% - 40px);max-width:420px;justify-content:space-around}
+.pill-item{display:flex;flex-direction:column;align-items:center;gap:2px;text-decoration:none;color:rgba(201,168,76,0.5);font-size:0.42rem;letter-spacing:0.08em;text-transform:uppercase;padding:6px 8px;border-radius:40px;transition:all 0.3s}
+.pill-item i{font-size:1rem;transition:all 0.3s}
+.pill-item.active{background:rgba(201,168,76,0.15);color:var(--gold)}
+.pill-item.active i{color:var(--gold);transform:scale(1.1)}
+.pill-item:hover{color:var(--gold)}
+
+/* ════════ BREADCRUMB ════════ */
+.breadcrumb{padding:96px 8% 0;display:flex;align-items:center;gap:8px;font-size:0.58rem;letter-spacing:0.12em;color:var(--text-light);text-transform:uppercase}
+.breadcrumb a{text-decoration:none;color:var(--text-light);transition:color 0.3s}
+.breadcrumb a:hover{color:var(--gold)}
+.breadcrumb span{color:var(--gold)}
+
+/* ════════ CHECKOUT LAYOUT ════════ */
+.checkout-section{padding:32px 8% 100px}
+.checkout-layout{display:grid;grid-template-columns:1fr 440px;gap:48px;align-items:start}
+
+/* ════════ PROGRESS BAR ════════ */
+.checkout-progress{margin-bottom:40px}
+.progress-steps{display:flex;align-items:center;position:relative}
+.progress-steps::before{content:'';position:absolute;top:18px;left:40px;right:40px;height:1px;background:var(--border);z-index:0}
+.progress-steps::after{content:'';position:absolute;top:18px;left:40px;height:1px;background:var(--gold);z-index:1;transition:width 0.6s cubic-bezier(.4,0,.2,1);width:0}
+.progress-steps.step2::after{width:calc(50% - 40px)}
+.progress-steps.step3::after{width:calc(100% - 80px)}
+.step-item{display:flex;flex-direction:column;align-items:center;gap:10px;flex:1;position:relative;z-index:2;cursor:default}
+.step-circle{width:36px;height:36px;border-radius:50%;border:2px solid var(--border);background:var(--white);display:flex;align-items:center;justify-content:center;font-size:0.65rem;font-weight:600;color:var(--text-light);transition:all 0.4s}
+.step-item.active .step-circle{border-color:var(--gold);background:var(--gold);color:var(--white);box-shadow:0 0 0 4px rgba(201,168,76,0.15)}
+.step-item.done .step-circle{border-color:var(--green);background:var(--green);color:var(--white)}
+.step-label{font-size:0.55rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--text-light);transition:color 0.4s;text-align:center}
+.step-item.active .step-label{color:var(--gold);font-weight:600}
+.step-item.done .step-label{color:var(--green)}
+
+/* ════════ FORM CARD ════════ */
+.form-card{background:var(--white);border:1px solid var(--border);padding:36px 32px;margin-bottom:24px}
+.form-card-header{display:flex;align-items:center;gap:14px;margin-bottom:28px;padding-bottom:20px;border-bottom:1px solid var(--border)}
+.form-card-icon{width:44px;height:44px;border:1px solid var(--border-gold);display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:1rem;flex-shrink:0}
+.form-card-title{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:300;color:var(--green)}
+.form-card-sub{font-size:0.58rem;letter-spacing:0.15em;color:var(--text-light);text-transform:uppercase;margin-top:2px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.form-grid.triple{grid-template-columns:1fr 1fr 1fr}
+.form-full{grid-column:1/-1}
+.form-group{display:flex;flex-direction:column;gap:7px}
+.form-label{font-size:0.58rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--green)}
+.form-label span{color:var(--red);margin-left:2px}
+.form-input{padding:13px 16px;border:1px solid var(--border);background:var(--white);font-family:'Josefin Sans',sans-serif;font-size:0.72rem;color:var(--green);outline:none;transition:all 0.3s;letter-spacing:0.04em}
+.form-input::placeholder{color:var(--text-muted)}
+.form-input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,168,76,0.08)}
+.form-input.error{border-color:var(--red);box-shadow:0 0 0 3px rgba(198,40,40,0.08)}
+.form-error{font-size:0.55rem;color:var(--red);letter-spacing:0.08em;margin-top:-4px}
+select.form-input{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23024024' opacity='0.3'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center}
+textarea.form-input{resize:vertical;min-height:80px;line-height:1.7}
+
+/* ════════ DELIVERY OPTIONS ════════ */
+.delivery-options{display:flex;gap:12px;margin-bottom:4px}
+.delivery-option{flex:1;padding:16px;border:1.5px solid var(--border);background:var(--white);cursor:pointer;transition:all 0.3s;text-align:center;position:relative}
+.delivery-option:hover{border-color:rgba(201,168,76,0.4)}
+.delivery-option.selected{border-color:var(--gold);background:rgba(201,168,76,0.04)}
+.delivery-option.selected::after{content:'';position:absolute;top:8px;right:8px;width:18px;height:18px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center}
+.delivery-option.selected::before{content:'\f00c';font-family:'Font Awesome 6 Free';font-weight:900;font-size:0.45rem;color:var(--white);position:absolute;top:12px;right:12px;z-index:1}
+.delivery-icon{font-size:1.3rem;color:var(--gold);margin-bottom:10px}
+.delivery-name{font-size:0.7rem;font-weight:600;color:var(--green);letter-spacing:0.1em;margin-bottom:4px}
+.delivery-desc{font-size:0.58rem;color:var(--text-light);line-height:1.6;letter-spacing:0.04em}
+.delivery-price{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:600;color:var(--gold);margin-top:10px}
+.delivery-price.free{color:var(--success);font-size:0.85rem}
+
+/* ════════ PAYMENT OPTIONS ════════ */
+.payment-options{display:flex;gap:12px;margin-bottom:4px}
+.payment-option{flex:1;padding:20px;border:1.5px solid var(--border);background:var(--white);cursor:pointer;transition:all 0.3s;text-align:center;position:relative}
+.payment-option:hover{border-color:rgba(201,168,76,0.4)}
+.payment-option.selected{border-color:var(--gold);background:rgba(201,168,76,0.04)}
+.payment-option.selected::after{content:'';position:absolute;top:8px;right:8px;width:18px;height:18px;border-radius:50%;background:var(--gold)}
+.payment-option.selected::before{content:'\f00c';font-family:'Font Awesome 6 Free';font-weight:900;font-size:0.45rem;color:var(--white);position:absolute;top:12px;right:12px;z-index:1}
+.payment-logo{font-size:1.6rem;color:var(--green);margin-bottom:10px;display:flex;align-items:center;justify-content:center;gap:6px}
+.payment-logo .paystack-text{font-size:0.9rem;font-weight:600;font-family:'Josefin Sans',sans-serif;letter-spacing:0.05em}
+.payment-name{font-size:0.7rem;font-weight:600;color:var(--green);letter-spacing:0.1em;margin-bottom:6px}
+.payment-desc{font-size:0.58rem;color:var(--text-light);line-height:1.6;letter-spacing:0.04em}
+.payment-badge{display:inline-block;padding:3px 10px;background:rgba(201,168,76,0.1);border:1px solid rgba(201,168,76,0.2);font-size:0.5rem;letter-spacing:0.15em;color:var(--green);text-transform:uppercase;margin-top:10px;font-weight:600}
+
+/* Bank Details */
+.bank-details{display:none;padding:24px;background:rgba(201,168,76,0.03);border:1px solid rgba(201,168,76,0.12);margin-top:16px;animation:fadeSlide 0.4s ease}
+.bank-details.show{display:block}
+@keyframes fadeSlide{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
+.bank-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid rgba(2,64,36,0.05)}
+.bank-row:last-child{border-bottom:none}
+.bank-label{font-size:0.58rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-light)}
+.bank-value{font-size:0.72rem;font-weight:600;color:var(--green);letter-spacing:0.05em;display:flex;align-items:center;gap:8px}
+.bank-copy{background:none;border:none;cursor:pointer;color:var(--gold);font-size:0.7rem;transition:color 0.3s;padding:2px}
+.bank-copy:hover{color:var(--green-light)}
+.bank-note{font-size:0.6rem;color:var(--text-light);line-height:1.8;margin-top:12px;padding:12px;background:rgba(2,64,36,0.03);border-left:3px solid var(--gold);letter-spacing:0.04em}
+.bank-note strong{color:var(--green)}
+
+/* ════════ UPLOAD PROOF ════════ */
+.upload-proof{display:none;margin-top:16px;animation:fadeSlide 0.4s ease}
+.upload-proof.show{display:block}
+.upload-area{border:2px dashed rgba(201,168,76,0.25);padding:28px 20px;text-align:center;cursor:pointer;transition:all 0.3s;position:relative;overflow:hidden}
+.upload-area:hover{border-color:var(--gold);background:rgba(201,168,76,0.02)}
+.upload-area.has-file{border-color:var(--green);border-style:solid;background:rgba(46,125,50,0.03)}
+.upload-icon{font-size:1.8rem;color:var(--gold);margin-bottom:10px;display:block}
+.upload-text{font-size:0.65rem;letter-spacing:0.1em;color:var(--text);margin-bottom:4px}
+.upload-sub{font-size:0.55rem;color:var(--text-muted)}
+.upload-area input{position:absolute;inset:0;opacity:0;cursor:pointer}
+
+/* ════════ PLACE ORDER ════════ */
+.place-order-btn{width:100%;padding:18px;background:var(--gold);color:var(--green);font-family:'Josefin Sans',sans-serif;font-size:0.65rem;letter-spacing:0.3em;text-transform:uppercase;font-weight:600;border:none;cursor:pointer;transition:all 0.3s;display:flex;align-items:center;justify-content:center;gap:10px;margin-top:8px}
+.place-order-btn:hover{background:var(--gold-light);transform:translateY(-1px);box-shadow:0 8px 30px rgba(201,168,76,0.3)}
+.place-order-btn:disabled{opacity:0.5;cursor:not-allowed;transform:none;box-shadow:none}
+.secure-note{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:14px;font-size:0.55rem;letter-spacing:0.12em;color:var(--text-muted)}
+.secure-note i{color:var(--gold);font-size:0.65rem}
+
+/* ════════ ORDER SUMMARY ════════ */
+.order-summary{position:sticky;top:96px;background:var(--white);border:1px solid var(--border);overflow:hidden}
+.summary-header{padding:24px 28px;background:var(--green);display:flex;align-items:center;gap:12px}
+.summary-header i{color:var(--gold);font-size:1rem}
+.summary-title{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:300;color:var(--white);letter-spacing:0.1em}
+.summary-body{padding:24px 28px}
+.summary-items{margin-bottom:20px}
+.summary-item{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid var(--border);align-items:flex-start}
+.summary-item:last-child{border-bottom:none}
+.summary-item-img{width:64px;height:80px;flex-shrink:0;position:relative;overflow:hidden}
+.si1{background:linear-gradient(135deg,#024024,#035a30,#c9a84c22)}
+.si2{background:linear-gradient(135deg,#1a3a00,#024024)}
+.si3{background:linear-gradient(135deg,#300010,#1a0030,#024024)}
+.summary-item-info{flex:1;min-width:0}
+.summary-item-name{font-family:'Cormorant Garamond',serif;font-size:0.95rem;color:var(--green);margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.summary-item-meta{font-size:0.52rem;letter-spacing:0.15em;color:var(--text-light);text-transform:uppercase;display:flex;gap:10px}
+.summary-item-price{font-size:0.82rem;font-weight:600;color:var(--gold);margin-top:4px}
+.summary-item-qty{display:inline-flex;align-items:center;gap:6px;background:rgba(2,64,36,0.04);padding:3px 10px;border-radius:20px;font-size:0.55rem;color:var(--text-light);margin-top:4px;letter-spacing:0.08em}
+.summary-divider{height:1px;background:var(--border);margin:20px 0}
+.summary-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0}
+.summary-row-label{font-size:0.62rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-light)}
+.summary-row-value{font-size:0.78rem;color:var(--green);letter-spacing:0.05em}
+.summary-row-value.free{color:var(--success);font-weight:600;font-size:0.65rem}
+.summary-row-value.added{color:var(--gold);font-size:0.65rem}
+.summary-total{display:flex;justify-content:space-between;align-items:baseline;padding:20px 0 0;margin-top:8px;border-top:2px solid var(--green)}
+.summary-total-label{font-size:0.68rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--green);font-weight:600}
+.summary-total-value{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:600;color:var(--gold)}
+.summary-save{background:rgba(46,125,50,0.06);border:1px solid rgba(46,125,50,0.15);padding:12px 16px;display:flex;align-items:center;gap:10px;margin-top:16px}
+.summary-save i{color:var(--success);font-size:0.8rem}
+.summary-save-text{font-size:0.6rem;color:var(--success);letter-spacing:0.08em;line-height:1.6}
+.summary-save-text strong{font-weight:600}
+.summary-trust{padding:20px 28px;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:10px}
+.trust-item{display:flex;align-items:center;gap:10px;font-size:0.58rem;letter-spacing:0.08em;color:var(--text-light)}
+.trust-item i{color:var(--gold);font-size:0.65rem;width:16px;text-align:center}
+
+/* ════════ COUPON ════════ */
+.coupon-wrap{display:flex;gap:8px;margin-bottom:4px}
+.coupon-input{flex:1;padding:12px 14px;border:1px solid var(--border);font-family:'Josefin Sans',sans-serif;font-size:0.65rem;color:var(--green);outline:none;letter-spacing:0.1em;transition:border-color 0.3s}
+.coupon-input::placeholder{color:var(--text-muted)}
+.coupon-input:focus{border-color:var(--gold)}
+.coupon-btn{padding:12px 20px;background:var(--green);color:var(--white);font-family:'Josefin Sans',sans-serif;font-size:0.58rem;letter-spacing:0.15em;text-transform:uppercase;border:none;cursor:pointer;transition:all 0.3s;white-space:nowrap}
+.coupon-btn:hover{background:var(--gold);color:var(--green)}
+
+/* ════════ SUCCESS MODAL ════════ */
+.success-overlay{position:fixed;inset:0;background:rgba(2,64,36,0.6);backdrop-filter:blur(12px);z-index:3000;opacity:0;visibility:hidden;transition:all 0.5s;display:flex;align-items:center;justify-content:center;padding:24px}
+.success-overlay.show{opacity:1;visibility:visible}
+.success-modal{background:var(--white);width:100%;max-width:560px;text-align:center;padding:60px 40px;position:relative;animation:successIn 0.5s ease}
+@keyframes successIn{from{opacity:0;transform:scale(0.95) translateY(20px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.success-icon{width:80px;height:80px;border-radius:50%;background:var(--green);margin:0 auto 24px;display:flex;align-items:center;justify-content:center;font-size:2rem;color:var(--white);animation:successPop 0.6s 0.2s ease both}
+@keyframes successPop{from{transform:scale(0)}to{transform:scale(1)}}
+.success-title{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:300;color:var(--green);margin-bottom:8px}
+.success-order{font-size:0.6rem;letter-spacing:0.2em;color:var(--gold);text-transform:uppercase;margin-bottom:20px}
+.success-desc{font-size:0.72rem;line-height:1.8;color:var(--text);margin-bottom:28px;letter-spacing:0.04em}
+.success-details{background:var(--cream);padding:20px;margin-bottom:28px;text-align:left}
+.success-detail-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:0.65rem}
+.success-detail-row:last-child{border-bottom:none}
+.success-detail-label{color:var(--text-light);letter-spacing:0.1em}
+.success-detail-value{color:var(--green);font-weight:600;letter-spacing:0.05em}
+.success-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.success-btn{padding:14px 32px;font-family:'Josefin Sans',sans-serif;font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;border:none;cursor:pointer;transition:all 0.3s;text-decoration:none;display:inline-flex;align-items:center;gap:8px}
+.success-btn-primary{background:var(--green);color:var(--white)}
+.success-btn-primary:hover{background:var(--gold);color:var(--green)}
+.success-btn-outline{background:none;border:1px solid var(--border);color:var(--green)}
+.success-btn-outline:hover{border-color:var(--gold);color:var(--gold)}
+.success-close{position:absolute;top:16px;right:16px;width:36px;height:36px;border:1px solid var(--border);background:var(--white);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--green);font-size:0.8rem;transition:all 0.3s}
+.success-close:hover{background:var(--green);color:var(--white);border-color:var(--green)}
+
+/* ════════ FOOTER ════════ */
+footer{background:#010e06;padding:32px 8% 24px;color:rgba(255,255,255,0.4)}
+.footer-inner{max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.footer-logo{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:300;color:var(--gold);letter-spacing:0.2em}
+.footer-copy{font-size:0.55rem;letter-spacing:0.1em}
+
+/* ════════ TOAST ════════ */
+.toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(16px);background:var(--green);color:var(--white);padding:12px 24px;font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;opacity:0;transition:all 0.4s;z-index:5000;border-left:3px solid var(--gold);white-space:nowrap;pointer-events:none}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ════════ RESPONSIVE ════════ */
+@media(max-width:1100px){
+  .checkout-layout{grid-template-columns:1fr 380px;gap:32px}
+}
+@media(max-width:900px){
+  nav{padding:0 24px}
+  .nav-links{display:none}
+  .mobile-pill{display:flex}
+  body{padding-bottom:90px}
+  .breadcrumb{padding:80px 6% 0}
+  .checkout-section{padding:24px 6% 120px}
+  .checkout-layout{grid-template-columns:1fr;gap:24px}
+  .order-summary{position:static;order:-1}
+  .form-grid{grid-template-columns:1fr}
+  .form-grid.triple{grid-template-columns:1fr 1fr}
+  .delivery-options{flex-direction:column}
+  .payment-options{flex-direction:column}
+}
+@media(max-width:520px){
+  .checkout-section{padding:20px 5% 140px}
+  .form-card{padding:24px 20px}
+  .summary-body{padding:20px}
+  .summary-header{padding:20px}
+  .progress-steps::before{left:24px;right:24px}
+  .progress-steps::after{left:24px}
+  .step-label{font-size:0.48rem}
+  .step-circle{width:32px;height:32px;font-size:0.58rem}
+  .success-modal{padding:40px 24px}
+  .success-btns{flex-direction:column}
+  .success-btn{justify-content:center}
+  .bank-value{font-size:0.65rem;flex-direction:column;align-items:flex-end;gap:2px}
+  .bank-copy{position:absolute;right:0;top:50%;transform:translateY(-50%)}
+}
+</style>
+</head>
+<body>
+
+<!-- ════════ LOADER ════════ -->
+<div id="loader">
+  <div class="l-particles"><div class="l-p"></div><div class="l-p"></div><div class="l-p"></div><div class="l-p"></div><div class="l-p"></div><div class="l-p"></div></div>
+  <div class="loader-outer">
+    <svg viewBox="0 0 140 140">
+      <circle class="l-ring1" cx="70" cy="70" r="64"/>
+      <circle class="l-ring2" cx="70" cy="70" r="54"/>
+      <circle class="l-ring3" cx="70" cy="70" r="44"/>
+    </svg>
+    <div class="loader-center">
+      <div class="l-logo">T.N.B</div>
+      <div class="l-tag">Checkout</div>
+    </div>
+  </div>
+  <div class="l-progress"></div>
+</div>
+
+<!-- ════════ NAV ════════ -->
+<nav id="mainNav">
+  <a href="index.html" class="nav-logo">T.N.B</a>
+  <ul class="nav-links">
+    <li><a href="index.html"><i class="fas fa-house"></i> Home</a></li>
+    <li><a href="shop.html"><i class="fas fa-bag-shopping"></i> Shop</a></li>
+    <li><a href="training.html"><i class="fas fa-graduation-cap"></i> Training</a></li>
+    <li><a href="career.html"><i class="fas fa-briefcase"></i> Career</a></li>
+    <li><a href="about.html"><i class="fas fa-circle-info"></i> About</a></li>
+  </ul>
+  <div class="nav-actions">
+    <button class="nav-icon-btn"><i class="fas fa-search"></i></button>
+    <button class="nav-icon-btn"><i class="fas fa-shopping-bag"></i><span class="cart-count">2</span></button>
+  </div>
+</nav>
+
+<!-- ════════ MOBILE PILL ════════ -->
+<nav class="mobile-pill">
+  <a href="index.html" class="pill-item"><i class="fas fa-house"></i><span>Home</span></a>
+  <a href="shop.html" class="pill-item"><i class="fas fa-bag-shopping"></i><span>Shop</span></a>
+  <a href="training.html" class="pill-item"><i class="fas fa-graduation-cap"></i><span>Train</span></a>
+  <a href="career.html" class="pill-item"><i class="fas fa-briefcase"></i><span>Career</span></a>
+  <a href="about.html" class="pill-item"><i class="fas fa-circle-info"></i><span>About</span></a>
+</nav>
+
+<!-- ════════ BREADCRUMB ════════ -->
+<div class="breadcrumb">
+  <a href="index.html">Home</a><span>/</span>
+  <a href="shop.html">Shop</a><span>/</span>
+  <a href="#">Cart</a><span>/</span>
+  <span>Checkout</span>
+</div>
+
+<!-- ════════ CHECKOUT ════════ -->
+<section class="checkout-section">
+  <div class="checkout-layout">
+
+    <!-- LEFT: FORM -->
+    <div class="checkout-form-area">
+
+      <!-- Progress -->
+      <div class="checkout-progress">
+        <div class="progress-steps step1" id="progressSteps">
+          <div class="step-item active">
+            <div class="step-circle">1</div>
+            <div class="step-label">Information</div>
+          </div>
+          <div class="step-item">
+            <div class="step-circle">2</div>
+            <div class="step-label">Delivery</div>
+          </div>
+          <div class="step-item">
+            <div class="step-circle">3</div>
+            <div class="step-label">Payment</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 1: Customer Info -->
+      <div class="form-card" id="step1">
+        <div class="form-card-header">
+          <div class="form-card-icon"><i class="fas fa-user"></i></div>
+          <div>
+            <div class="form-card-title">Contact Information</div>
+            <div class="form-card-sub">Where should we send your order?</div>
+          </div>
+        </div>
+        <div class="form-grid">
+          <div class="form-group form-full">
+            <label class="form-label">Email Address <span>*</span></label>
+            <input type="email" class="form-input" id="email" placeholder="your@email.com">
+          </div>
+          <div class="form-group">
+            <label class="form-label">First Name <span>*</span></label>
+            <input type="text" class="form-input" id="firstName" placeholder="First name">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Last Name <span>*</span></label>
+            <input type="text" class="form-input" id="lastName" placeholder="Last name">
+          </div>
+          <div class="form-group form-full">
+            <label class="form-label">Phone Number <span>*</span></label>
+            <input type="tel" class="form-input" id="phone" placeholder="+234 800 000 0000">
+          </div>
+        </div>
+        <div style="margin-top:20px;text-align:right">
+          <button class="coupon-btn" onclick="goToStep(2)" style="padding:14px 36px">Continue to Delivery <i class="fas fa-arrow-right" style="margin-left:6px"></i></button>
+        </div>
+      </div>
+
+      <!-- Step 2: Delivery -->
+      <div class="form-card" id="step2" style="display:none">
+        <div class="form-card-header">
+          <div class="form-card-icon"><i class="fas fa-truck"></i></div>
+          <div>
+            <div class="form-card-title">Delivery Method</div>
+            <div class="form-card-sub">Choose how you want to receive your order</div>
+          </div>
+        </div>
+
+        <div class="delivery-options">
+          <div class="delivery-option selected" onclick="selectDelivery(this,'delivery')">
+            <div class="delivery-icon"><i class="fas fa-truck-fast"></i></div>
+            <div class="delivery-name">Doorstep Delivery</div>
+            <div class="delivery-desc">Delivered to your address within 3–7 business days after production.</div>
+            <div class="delivery-price free" id="deliveryPrice">Free</div>
+          </div>
+          <div class="delivery-option" onclick="selectDelivery(this,'pickup')">
+            <div class="delivery-icon"><i class="fas fa-store"></i></div>
+            <div class="delivery-name">Studio Pickup</div>
+            <div class="delivery-desc">Pick up at our Victoria Island studio when your order is ready.</div>
+            <div class="delivery-price free">Free</div>
+          </div>
+        </div>
+
+        <!-- Delivery Address (conditional) -->
+        <div id="deliveryAddress" style="margin-top:24px">
+          <div class="form-grid">
+            <div class="form-group form-full">
+              <label class="form-label">Street Address <span>*</span></label>
+              <input type="text" class="form-input" id="address" placeholder="Street address, apartment, suite">
+            </div>
+            <div class="form-group">
+              <label class="form-label">City <span>*</span></label>
+              <input type="text" class="form-input" id="city" placeholder="e.g. Lagos" value="Lagos">
+            </div>
+            <div class="form-group">
+              <label class="form-label">State <span>*</span></label>
+              <select class="form-input" id="state">
+                <option value="">Select state</option>
+                <option value="Lagos" selected>Lagos</option>
+                <option value="Abuja">Abuja</option>
+                <option value="Ogun">Ogun</option>
+                <option value="Oyo">Oyo</option>
+                <option value="Rivers">Rivers</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Postal Code</label>
+              <input type="text" class="form-input" id="postal" placeholder="Optional">
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:20px;display:flex;gap:12px;justify-content:flex-end">
+          <button class="coupon-btn" onclick="goToStep(1)" style="background:none;border:1px solid var(--border);color:var(--text-light)"><i class="fas fa-arrow-left" style="margin-right:6px"></i> Back</button>
+          <button class="coupon-btn" onclick="goToStep(3)">Continue to Payment <i class="fas fa-arrow-right" style="margin-left:6px"></i></button>
+        </div>
+      </div>
+
+      <!-- Step 3: Payment -->
+      <div class="form-card" id="step3" style="display:none">
+        <div class="form-card-header">
+          <div class="form-card-icon"><i class="fas fa-lock"></i></div>
+          <div>
+            <div class="form-card-title">Payment Method</div>
+            <div class="form-card-sub">Choose how you want to pay</div>
+          </div>
+        </div>
+
+        <div class="payment-options">
+          <div class="payment-option selected" onclick="selectPayment(this,'paystack')">
+            <div class="payment-logo">
+              <i class="fas fa-bolt"></i>
+              <span class="paystack-text">Paystack</span>
+            </div>
+            <div class="payment-name">Instant Payment</div>
+            <div class="payment-desc">Pay securely with card, bank transfer, or USSD. Instant confirmation.</div>
+            <div class="payment-badge"><i class="fas fa-shield-alt" style="margin-right:4px"></i> Secure & Instant</div>
+          </div>
+          <div class="payment-option" onclick="selectPayment(this,'transfer')">
+            <div class="payment-logo"><i class="fas fa-building-columns"></i></div>
+            <div class="payment-name">Bank Transfer</div>
+            <div class="payment-desc">Transfer to our bank account and upload proof. Verified within 24hrs.</div>
+            <div class="payment-badge"><i class="fas fa-clock" style="margin-right:4px"></i> 24hr Verification</div>
+          </div>
+        </div>
+
+        <!-- Bank Details (conditional) -->
+        <div class="bank-details" id="bankDetails">
+          <div class="bank-row">
+            <span class="bank-label">Bank Name</span>
+            <span class="bank-value">Wema Bank <button class="bank-copy" onclick="copyText('Wema Bank')" title="Copy"><i class="far fa-copy"></i></button></span>
+          </div>
+          <div class="bank-row">
+            <span class="bank-label">Account Number</span>
+            <span class="bank-value" style="position:relative">7825487912 <button class="bank-copy" onclick="copyText('7825487912')" title="Copy"><i class="far fa-copy"></i></button></span>
+          </div>
+          <div class="bank-row">
+            <span class="bank-label">Account Name</span>
+            <span class="bank-value">Trendy N Bespoke Ent.<button class="bank-copy" onclick="copyText('Trendy N Bespoke Ent.')" title="Copy"><i class="far fa-copy"></i></button></span>
+          </div>
+          <div class="bank-row">
+            <span class="bank-label">Amount</span>
+            <span class="bank-value" style="color:var(--gold)" id="bankAmount">₦170,000</span>
+          </div>
+          <div class="bank-note">
+            <strong>Important:</strong> After transferring, please upload your payment proof below. Your order will be confirmed within 24 hours of verification. Use your <strong>Order ID</strong> as the payment reference.
+          </div>
+        </div>
+
+        <!-- Upload Proof (conditional) -->
+        <div class="upload-proof" id="uploadProof">
+          <div class="upload-area" id="uploadArea" onclick="document.getElementById('proofFile').click()">
+            <input type="file" id="proofFile" accept="image/*" onchange="handleProofUpload(this)">
+            <i class="fas fa-cloud-upload-alt upload-icon" id="uploadIcon"></i>
+            <div class="upload-text" id="uploadText">Click to upload payment proof</div>
+            <div class="upload-sub">JPG, PNG — Max 5MB</div>
+          </div>
+        </div>
+
+        <!-- Order Note -->
+        <div style="margin-top:20px">
+          <div class="form-group">
+            <label class="form-label">Order Note (Optional)</label>
+            <textarea class="form-input" placeholder="Any special instructions for your order..." rows="3"></textarea>
+          </div>
+        </div>
+
+        <div style="margin-top:20px;display:flex;gap:12px;justify-content:flex-end">
+          <button class="coupon-btn" onclick="goToStep(2)" style="background:none;border:1px solid var(--border);color:var(--text-light)"><i class="fas fa-arrow-left" style="margin-right:6px"></i> Back</button>
+          <button class="place-order-btn" id="placeOrderBtn" onclick="placeOrder()"><i class="fas fa-lock"></i> Place Order</button>
+        </div>
+        <div class="secure-note">
+          <i class="fas fa-shield-alt"></i>
+          Your information is encrypted and secure. We never store your card details.
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: ORDER SUMMARY -->
+    <div class="order-summary">
+      <div class="summary-header">
+        <i class="fas fa-bag-shopping"></i>
+        <span class="summary-title">Order Summary</span>
+      </div>
+      <div class="summary-body">
+
+        <!-- Items -->
+        <div class="summary-items">
+          <div class="summary-item">
+            <div class="summary-item-img si1"></div>
+            <div class="summary-item-info">
+              <div class="summary-item-name">Emerald Evening Gown</div>
+              <div class="summary-item-meta">
+                <span>Bridal</span>
+                <span>Size: M</span>
+              </div>
+              <div class="summary-item-price">₦85,000</div>
+              <div class="summary-item-qty"><i class="fas fa-times" style="font-size:0.45rem"></i> Qty: 1</div>
+            </div>
+          </div>
+          <div class="summary-item">
+            <div class="summary-item-img si2"></div>
+            <div class="summary-item-info">
+              <div class="summary-item-name">Adire Wrap Set</div>
+              <div class="summary-item-meta">
+                <span>Asoebi</span>
+                <span>Size: L</span>
+              </div>
+              <div class="summary-item-price">₦42,000</div>
+              <div class="summary-item-qty"><i class="fas fa-times" style="font-size:0.45rem"></i> Qty: 1</div>
+            </div>
+          </div>
+          <div class="summary-item">
+            <div class="summary-item-img si3"></div>
+            <div class="summary-item-info">
+              <div class="summary-item-name">Aso-Oke Royale Ensemble</div>
+              <div class="summary-item-meta">
+                <span>Bridal</span>
+                <span>Size: M</span>
+              </div>
+              <div class="summary-item-price">₦120,000</div>
+              <div class="summary-item-qty"><i class="fas fa-times" style="font-size:0.45rem"></i> Qty: 1</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Coupon -->
+        <div class="coupon-wrap">
+          <input type="text" class="coupon-input" placeholder="Discount code" id="couponInput">
+          <button class="coupon-btn" onclick="applyCoupon()">Apply</button>
+        </div>
+
+        <div class="summary-divider"></div>
+
+        <!-- Totals -->
+        <div class="summary-row">
+          <span class="summary-row-label">Subtotal</span>
+          <span class="summary-row-value" id="subtotalVal">₦247,000</span>
+        </div>
+        <div class="summary-row" id="discountRow" style="display:none">
+          <span class="summary-row-label">Discount</span>
+          <span class="summary-row-value added" id="discountVal">-₦0</span>
+        </div>
+        <div class="summary-row">
+          <span class="summary-row-label">Delivery</span>
+          <span class="summary-row-value free" id="deliveryFeeVal">Free</span>
+        </div>
+        <div class="summary-total">
+          <span class="summary-total-label">Total</span>
+          <span class="summary-total-value" id="totalVal">₦247,000</span>
+        </div>
+
+        <!-- Savings -->
+        <div class="summary-save">
+          <i class="fas fa-tag"></i>
+          <div class="summary-save-text">You're saving <strong>₦25,000</strong> on this order with our discounted pricing!</div>
+        </div>
+
+        <!-- Trust -->
+        <div class="summary-trust">
+          <div class="trust-item"><i class="fas fa-truck"></i> Free delivery on orders over ₦100K</div>
+          <div class="trust-item"><i class="fas fa-undo"></i> 7-day return policy</div>
+          <div class="trust-item"><i class="fas fa-shield-alt"></i> 100% authentic guarantee</div>
+          <div class="trust-item"><i class="fas fa-lock"></i> Secure payment processing</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ SUCCESS MODAL ════════ -->
+<div class="success-overlay" id="successOverlay">
+  <div class="success-modal">
+    <button class="success-close" onclick="closeSuccess()"><i class="fas fa-times"></i></button>
+    <div class="success-icon"><i class="fas fa-check"></i></div>
+    <div class="success-title">Order Placed Successfully</div>
+    <div class="success-order" id="successOrderId">Order #TNB-2026-4827</div>
+    <div class="success-desc">Thank you for shopping with TNB! A confirmation has been sent to your email. You'll receive updates as your order progresses through production.</div>
+    <div class="success-details">
+      <div class="success-detail-row">
+        <span class="success-detail-label">Order ID</span>
+        <span class="success-detail-value" id="successDetailId">#TNB-2026-4827</span>
+      </div>
+      <div class="success-detail-row">
+        <span class="success-detail-label">Items</span>
+        <span class="success-detail-value">3 pieces</span>
+      </div>
+      <div class="success-detail-row">
+        <span class="success-detail-label">Total</span>
+        <span class="success-detail-value" style="color:var(--gold)" id="successDetailTotal">₦247,000</span>
+      </div>
+      <div class="success-detail-row">
+        <span class="success-detail-label">Payment</span>
+        <span class="success-detail-value" id="successDetailPay">Paystack — Confirmed</span>
+      </div>
+      <div class="success-detail-row">
+        <span class="success-detail-label">Estimated Delivery</span>
+        <span class="success-detail-value">7–14 business days</span>
+      </div>
+    </div>
+    <div class="success-btns">
+      <a href="shop.html" class="success-btn success-btn-outline"><i class="fas fa-arrow-left"></i> Continue Shopping</a>
+      <a href="index.html" class="success-btn success-btn-primary"><i class="fas fa-house"></i> Back to Home</a>
+    </div>
+  </div>
+</div>
+
+<!-- ════════ TOAST ════════ -->
+<div class="toast" id="toast"></div>
+
+<!-- ════════ FOOTER ════════ -->
+<footer>
+  <div class="footer-inner">
+    <span class="footer-logo">T.N.B</span>
+    <span class="footer-copy">© 2026 Trendy N Bespoke. All Rights Reserved.</span>
+  </div>
+</footer>
+
+<script>
+/* ════════ LOADER ════════ */
+window.addEventListener('load',()=>{setTimeout(()=>{document.getElementById('loader').classList.add('hide')},2400)});
+
+/* ════════ NAV SCROLL ════════ */
+window.addEventListener('scroll',()=>{document.getElementById('mainNav').classList.toggle('scrolled',window.scrollY>60)});
+
+/* ════════ STEP NAVIGATION ════════ */
+let currentStep=1;
+let selectedDelivery='delivery';
+let selectedPayment='paystack';
+
+function goToStep(n){
+  // Validate current step before proceeding
+  if(n > currentStep){
+    if(currentStep===1 && !validateStep1()) return;
+    if(currentStep===2 && !validateStep2()) return;
+  }
+  
+  currentStep=n;
+  document.getElementById('step1').style.display=n===1?'':'none';
+  document.getElementById('step2').style.display=n===2?'':'none';
+  document.getElementById('step3').style.display=n===3?'':'none';
+  
+  const progress=document.getElementById('progressSteps');
+  progress.className='progress-steps step'+n;
+  
+  // Scroll to top of form
+  document.querySelector('.checkout-progress').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function validateStep1(){
+  const email=document.getElementById('email').value.trim();
+  const first=document.getElementById('firstName').value.trim();
+  const last=document.getElementById('lastName').value.trim();
+  const phone=document.getElementById('phone').value.trim();
+  
+  let valid=true;
+  document.querySelectorAll('#step1 .form-input').forEach(i=>i.classList.remove('error'));
+  
+  if(!email||!email.includes('@')){document.getElementById('email').classList.add('error');valid=false}
+  if(!first){document.getElementById('firstName').classList.add('error');valid=false}
+  if(!last){document.getElementById('lastName').classList.add('error');valid=false}
+  if(!phone||phone.length<8){document.getElementById('phone').classList.add('error');valid=false}
+  
+  if(!valid) showToast('Please fill in all required fields');
+  return valid;
+}
+
+function validateStep2(){
+  if(selectedDelivery==='delivery'){
+    const addr=document.getElementById('address').value.trim();
+    const city=document.getElementById('city').value.trim();
+    const state=document.getElementById('state').value;
+    let valid=true;
+    document.querySelectorAll('#deliveryAddress .form-input').forEach(i=>i.classList.remove('error'));
+    
+    if(!addr){document.getElementById('address').classList.add('error');valid=false}
+    if(!city){document.getElementById('city').classList.add('error');valid=false}
+    if(!state){document.getElementById('state').classList.add('error');valid=false}
+    
+    if(!valid) showToast('Please enter your delivery address');
+    return valid;
+  }
+  return true;
+}
+
+/* ════════ DELIVERY ════════ */
+function selectDelivery(el,type){
+  document.querySelectorAll('.delivery-option').forEach(o=>o.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedDelivery=type;
+  
+  const addrEl=document.getElementById('deliveryAddress');
+  const feeEl=document.getElementById('deliveryFeeVal');
+  
+  if(type==='pickup'){
+    addrEl.style.display='none';
+    feeEl.textContent='Free';
+  } else {
+    addrEl.style.display='';
+    // Check subtotal for free delivery threshold
+    const subtotal=getSubtotal();
+    feeEl.textContent=subtotal>=100000?'Free':'₦3,500';
+    feeEl.className=subtotal>=100000?'summary-row-value free':'summary-row-value added';
+  }
+  updateTotals();
+}
+
+/* ════════ PAYMENT ════════ */
+function selectPayment(el,type){
+  document.querySelectorAll('.payment-option').forEach(o=>o.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedPayment=type;
+  
+  const bankEl=document.getElementById('bankDetails');
+  const uploadEl=document.getElementById('uploadProof');
+  
+  if(type==='transfer'){
+    bankEl.classList.add('show');
+    uploadEl.classList.add('show');
+  } else {
+    bankEl.classList.remove('show');
+    uploadEl.classList.remove('show');
+  }
+}
+
+/* ════════ PROOF UPLOAD ════════ */
+function handleProofUpload(input){
+  if(input.files[0]){
+    const area=document.getElementById('uploadArea');
+    const icon=document.getElementById('uploadIcon');
+    const text=document.getElementById('uploadText');
+    area.classList.add('has-file');
+    icon.className='fas fa-check-circle upload-icon';
+    icon.style.color='var(--success)';
+    text.textContent=input.files[0].name;
+    showToast('Proof uploaded successfully');
+  }
+}
+
+/* ════════ COUPON ════════ */
+function applyCoupon(){
+  const code=document.getElementById('couponInput').value.trim();
+  if(!code){showToast('Please enter a discount code');return}
+  
+  // Simulated coupon
+  if(code.toUpperCase()==='TNB10' || code.toUpperCase()==='FIRST10'){
+    const subtotal=getSubtotal();
+    const discount=Math.round(subtotal*0.1);
+    document.getElementById('discountRow').style.display='';
+    document.getElementById('discountVal').textContent='-₦'+discount.toLocaleString();
+    updateTotals();
+    showToast('10% discount applied!');
+  } else {
+    showToast('Invalid discount code');
+  }
+}
+
+function getSubtotal(){return 247000}
+
+function updateTotals(){
+  const subtotal=getSubtotal();
+  const discountEl=document.getElementById('discountRow');
+  let discount=0;
+  if(discountEl.style.display!=='none'){
+    discount=parseInt(document.getElementById('discountVal').textContent.replace(/[₦,\-]/g,''))||0;
+  }
+  
+  let deliveryFee=0;
+  if(selectedDelivery==='delivery' && subtotal<100000) deliveryFee=3500;
+  
+  const total=subtotal-discount+deliveryFee;
+  document.getElementById('subtotalVal').textContent='₦'+subtotal.toLocaleString();
+  document.getElementById('deliveryFeeVal').textContent=deliveryFee?'₦'+deliveryFee.toLocaleString():'Free';
+  document.getElementById('deliveryFeeVal').className=deliveryFee?'summary-row-value added':'summary-row-value free';
+  document.getElementById('totalVal').textContent='₦'+total.toLocaleString();
+  document.getElementById('bankAmount').textContent='₦'+total.toLocaleString();
+}
+
+/* ════════ PLACE ORDER ════════ */
+function placeOrder(){
+  const btn=document.getElementById('placeOrderBtn');
+  
+  // Additional validation for payment step
+  if(selectedPayment==='transfer'){
+    const fileInput=document.getElementById('proofFile');
+    if(!fileInput.files[0]){
+      showToast('Please upload your payment proof');
+      return;
+    }
+  }
+  
+  btn.disabled=true;
+  btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Processing...';
+  
+  setTimeout(()=>{
+    // Generate order ID
+    const orderId='#TNB-2026-'+String(Math.floor(1000+Math.random()*9000));
+    
+    // Show success
+    document.getElementById('successOrderId').textContent=orderId;
+    document.getElementById('successDetailId').textContent=orderId;
+    document.getElementById('successDetailTotal').textContent=document.getElementById('totalVal').textContent;
+    
+    if(selectedPayment==='paystack'){
+      document.getElementById('successDetailPay').textContent='Paystack — Confirmed';
+    } else {
+      document.getElementById('successDetailPay').textContent='Bank Transfer — Under Review';
+    }
+    
+    document.getElementById('successOverlay').classList.add('show');
+    document.body.style.overflow='hidden';
+    
+    btn.disabled=false;
+    btn.innerHTML='<i class="fas fa-lock"></i> Place Order';
+  },2500);
+}
+
+function closeSuccess(){
+  document.getElementById('successOverlay').classList.remove('show');
+  document.body.style.overflow='';
+  window.location.href='shop.html';
+}
+
+/* ════════ COPY TEXT ════════ */
+function copyText(text){
+  navigator.clipboard.writeText(text).then(()=>{
+    showToast('Copied to clipboard');
+  }).catch(()=>{
+    showToast('Copy failed — please copy manually');
+  });
+}
+
+/* ════════ TOAST ════════ */
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3000);
+}
+
+/* ════════ INPUT ERROR CLEAR ════════ */
+document.querySelectorAll('.form-input').forEach(input=>{
+  input.addEventListener('focus',()=>input.classList.remove('error'));
+});
+
+/* ════════ INIT ════════ */
+updateTotals();
+</script>
+</body>
+</html>
